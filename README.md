@@ -1,24 +1,30 @@
-# cookie-banner-vue
+# Cookie Banner Vue.js Project
 
-## Project setup
-```
-yarn install
-```
+## Project Description
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+This project refactors an existing Vanilla JavaScript-based cookie banner into a Vue.js application using Vue 3. The banner includes features such as:
 
-### Compiles and minifies for production
-```
-yarn build
-```
+- Cookie preferences management.
+- Integration with local storage for state persistence.
+- Script blocking for non-essential cookies.
+- API communication for logging and fetching configuration.
 
-### Lints and fixes files
-```
-yarn lint
-```
+---
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 14 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Project Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-repo/cookie-banner-vue.git
+   cd cookie-banner-vue
+
+
+   ```
