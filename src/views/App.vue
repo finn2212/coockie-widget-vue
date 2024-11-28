@@ -5,8 +5,20 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <CookieBanner :layout="config.layout" :content="config.content" />
-      <CookieDialog :config="config.content" :cookies="cookies" />
+      <CookieBanner
+        :layout="config.layout"
+        :content="config.content"
+        @open-dialog="openDialog"
+        @accept-all="acceptAllCookies"
+      />
+      <CookieDialog
+        v-if="isDialogOpen"
+        :isDialogOpen="isDialogOpen"
+        :config="config.content"
+        :cookies="cookies"
+        @close-dialog="closeDialog"
+        @save-preferences="savePreferences"
+      />
     </div>
   </div>
 </template>
@@ -22,6 +34,7 @@ export default {
     return {
       config: null,
       cookies: null,
+      isDialogOpen: false,
     };
   },
   created() {
@@ -33,6 +46,19 @@ export default {
       this.config = mockConfig;
       this.cookies = mockConfig.cookies;
       console.log(mockConfig);
+    },
+    openDialog() {
+      this.isDialogOpen = true;
+      console.log(this.isDialogOpen);
+    },
+    closeDialog() {
+      this.isDialogOpen = false;
+      console.log("Closing dialog..." + this.isDialogOpen);
+    },
+    savePreferences(updatedCookies) {
+      this.cookies = updatedCookies;
+      console.log("Preferences saved:", this.cookies);
+      this.closeDialog();
     },
   },
 };

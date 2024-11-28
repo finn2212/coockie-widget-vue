@@ -8,7 +8,7 @@ export const mockConfig = {
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "card", // Can be 'pill', 'banner', 'popup', or 'card'
+    appearance: "pill", // Can be 'pill', 'banner', 'popup', or 'card'
     position: "center", // Can be 'left', 'center', or 'right'
   },
   content: {

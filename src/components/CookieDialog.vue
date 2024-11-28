@@ -1,5 +1,5 @@
 <template>
-  <div class="cookie-dialog" v-if="isOpen">
+  <div class="cookie-dialog" v-if="isDialogOpen">
     <div class="dialog-header">
       <h2 class="dialog-title">{{ config.dialog_title }}</h2>
       <p class="dialog-message">{{ config.dialog_message }}</p>
@@ -28,7 +28,7 @@
 <script>
 export default {
   props: {
-    isOpen: {
+    isDialogOpen: {
       type: Boolean,
       default: false,
     },
