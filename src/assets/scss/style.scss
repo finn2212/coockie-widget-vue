@@ -11,6 +11,7 @@
   --gt-cookie-link-text: #ff0000;
   --gt-cookie-button-bg: #ff0000;
   --gt-cookie-button-text: #ffffff;
+  --gt-screen-margin: 30px;
 }
 
 .gt-cookie-noscroll {
@@ -19,4 +20,8 @@
 
 .gt-cookie-hide {
   display: none;
+}
+
+p {
+  margin: auto;
 }

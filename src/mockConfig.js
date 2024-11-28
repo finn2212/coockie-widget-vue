@@ -8,15 +8,14 @@ export const mockConfig = {
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "pill", // Can be 'pill', 'banner', 'popup', or 'card'
+    appearance: "card", // Can be 'pill', 'banner', 'popup', or 'card'
     position: "center", // Can be 'left', 'center', or 'right'
   },
   content: {
     cookiePolicyUrl: "https://getterms.io/cookie-policy",
     cookiePolicyLinkText: "Cookie Policy",
     dialogTitle: "Your Cookie Preferences",
-    dialogMessage:
-      "We use cookies to improve your experience on this website. You may choose which types of cookies to allow and change your preferences at any time. Disabling cookies may impact your experience on this website. You can learn more by viewing our [cookiepolicy].",
+    dialogMessage: "This website uses cookies",
     dialogSavePreferencesButton: "Save Preferences",
     dialogAcceptAllButton: "Accept All Cookies",
     dialogRejectAllButton: "Reject All Cookies",
