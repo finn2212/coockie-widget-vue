@@ -5,7 +5,7 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <CookieBanner :config="config.content.widget_banner_message" />
+      <CookieBanner :layout="config.layout" :content="config.content" />
       <CookieDialog :config="config.content" :cookies="cookies" />
     </div>
   </div>

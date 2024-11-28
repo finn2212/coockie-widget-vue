@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-cookie-widget gt-cookie-widget--banner">
+  <div :class="['gt-cookie-widget', `gt-cookie-widget--${layout.appearance}`]">
     <div class="gt-cookie-widget__content">
       <p>{{ message }}</p>
     </div>
@@ -15,9 +15,16 @@
 <script>
 export default {
   props: {
-    message: {
+    content: {
       type: String,
       default: "We use cookies to enhance your experience.",
+    },
+    layout: {
+      type: Object,
+      default: () => ({
+        appearance: "pill",
+        position: "center",
+      }),
     },
   },
   methods: {
