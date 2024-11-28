@@ -12,18 +12,28 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mockConfig } from "@/mockConfig"; // Adjust the path as needed
 import CookieBanner from "@/components/CookieBanner.vue";
 import CookieDialog from "@/components/CookieDialog.vue";
 
 export default {
   components: { CookieBanner, CookieDialog },
-  computed: {
-    ...mapGetters(["config", "cookies"]),
+  data() {
+    return {
+      config: null,
+      cookies: null,
+    };
   },
   created() {
-    // Dispatch action to load configuration data
-    this.$store.dispatch("loadConfig");
+    // Mock loading the config and cookies
+    this.loadConfig();
+  },
+  methods: {
+    loadConfig() {
+      this.config = mockConfig;
+      this.cookies = mockConfig.cookies;
+      console.log(mockConfig);
+    },
   },
 };
 </script>
