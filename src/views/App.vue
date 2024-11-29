@@ -4,7 +4,11 @@
     <div v-if="!config || !config.content">
       <p>Loading...</p>
     </div>
-    <div v-else>
+    <div
+      v-else
+      class="gt-cookie-widget-wrapper"
+      data-gt-cookie-widget-shown="true"
+    >
       <CookieBanner
         :layout="config.layout"
         :content="config.content"

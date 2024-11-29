@@ -13,7 +13,7 @@
 
     <!-- Content Message -->
     <div class="gt-cookie-widget__content">
-      <p>{{ content.dialogMessage }}</p>
+      <p>{{ content.widgetPillMessage }}</p>
     </div>
 
     <!-- Preferences Button -->

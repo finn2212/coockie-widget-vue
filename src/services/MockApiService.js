@@ -1,7 +1,6 @@
 const mockApiData = {
   config: {
     theme: {
-      font_size: "16px",
       background: "#ffffff",
       text: "#000000",
       link_text: "#1e90ff",

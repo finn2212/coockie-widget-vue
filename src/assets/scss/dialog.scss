@@ -44,7 +44,7 @@ $wrapper: ".gt-cookie-widget-wrapper";
   // opacity: 0;
 
   #{$wrapper}:not([data-gt-cookie-dialog-shown]) & {
-    display: none;
+    // display: none;
   }
 
   #{$wrapper}[data-gt-cookie-dialog-shown="true"] & {
