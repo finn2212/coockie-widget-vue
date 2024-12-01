@@ -3,12 +3,12 @@ export const mockConfig = {
     fontSize: "12px",
     background: "#ffffff",
     text: "#111111",
-    linkText: "#065af9",
+    linkText: "#065AF9",
     buttonBackground: "#065af9",
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "banner", // Can be 'pill', 'banner', 'popup', or 'card'
+    appearance: "popup", // Can be 'pill', 'banner', 'popup', or 'card'
     position: "left", // Can be 'left', 'center', or 'right'
   },
   content: {
@@ -48,11 +48,11 @@ export const mockConfig = {
     cookieHeadingRetention: "Retention",
   },
   functionality: {
-    allowPreferences: "on", // Allows users to manage preferences
-    blockInteraction: "off", // Prevents interaction until consent is given
-    blockScripts: "off", // Blocks third-party scripts before consent
-    hasRejectAll: "off", // Adds a 'Reject All' button
-    googleConsentMode: "on", // Integrates with Google Consent Mode
+    allowPreferences: true, // Allows users to manage preferences
+    blockInteraction: false, // Prevents interaction until consent is given
+    blockScripts: true, // Blocks third-party scripts before consent
+    hasRejectAll: true, // Adds a 'Reject All' button
+    googleConsentMode: true, // Integrates with Google Consent Mode
   },
   cookies: {
     essential: {

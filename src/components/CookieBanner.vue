@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div
     :class="[
@@ -10,22 +11,30 @@
     <i v-if="layout.appearance === 'pill'" class="gt-cookie-widget__icon">
       <CoockieIcon />
     </i>
-
     <!-- Content Message -->
     <div class="gt-cookie-widget__content">
       <p v-html="getContentMessage"></p>
     </div>
-
-    <!-- Preferences Button -->
-    <button
-      class="gt-cookie-widget__button gt-cookie-widget__button--naked"
-      @click="openPreferences"
-    >
-      {{ content.widgetManagePreferencesButton }}
-    </button>
-
     <!-- Accept All Action -->
     <div class="gt-cookie-widget__actions">
+      <!-- Show Settings Button -->
+      <button
+        v-if="functionality.allowPreferences && functionality.hasRejectAll"
+        class="gt-cookie-widget__icon-button"
+        @click="openPreferences"
+        aria-label="Open Cookie Preferences"
+      >
+        <SettingsSvg />
+      </button>
+      <!-- Preferences or Reject All Button -->
+      <button
+        v-if="functionality.allowPreferences || functionality.hasRejectAll"
+        class="gt-cookie-widget__button gt-cookie-widget__button--naked"
+        @click="buttonClickHandler"
+      >
+        {{ buttonText }}
+      </button>
+          <!-- Accept All Button -->
       <button class="gt-cookie-widget__button" @click="acceptAll">
         {{ content.widgetAcceptAllButton }}
       </button>
@@ -35,22 +44,19 @@
 
 <script>
 import CoockieIcon from "@/components/CoockieIcon.vue";
+import SettingsSvg from "@/components/SettingsSvg.vue";
 
 export default {
-  components: { CoockieIcon },
+  components: { CoockieIcon, SettingsSvg },
   props: {
     content: {
       type: Object,
-      default: () => ({
-        dialogMessage: "We use cookies to enhance your experience.",
-      }),
     },
     layout: {
       type: Object,
-      default: () => ({
-        appearance: "pill",
-        position: "center",
-      }),
+    },
+    functionality: {
+      type: Object,
     },
   },
   computed: {
@@ -69,6 +75,15 @@ export default {
 
       return message;
     },
+    buttonText() {
+      if (this.functionality.hasRejectAll) {
+        return this.content.widgetRejectAllButton;
+      }
+      if (this.functionality.allowPreferences) {
+        return this.content.widgetManagePreferencesButton;
+      }
+      return "";
+    },
   },
   methods: {
     acceptAll() {
@@ -80,6 +95,17 @@ export default {
       console.log("Opening preferences dialog...");
       // Emit an event to the parent for opening the dialog
       this.$emit("open-dialog");
+    },
+    buttonClickHandler() {
+      if (this.functionality.hasRejectAll) {
+        this.rejectAll();
+      } else if (this.functionality.allowPreferences) {
+        this.openPreferences();
+      }
+    },
+    rejectAll() {
+      this.$emit("reject-all");
+      console.log("Rejecting all cookies...");
     },
   },
 };

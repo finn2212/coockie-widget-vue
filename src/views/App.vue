@@ -12,6 +12,7 @@
       <CookieBanner
         :layout="config.layout"
         :content="config.content"
+        :functionality="config.functionality"
         @open-dialog="openDialog"
         @accept-all="acceptAllCookies"
       />
@@ -68,7 +69,7 @@ export default {
       const root = document.documentElement.style;
       root.setProperty("--gt-cookie-bg", theme.background);
       root.setProperty("--gt-cookie-text", theme.text);
-      root.setProperty("--gt-cookie-link-text", theme.link_text);
+      root.setProperty("--gt-cookie-link-text", theme.linkText);
       root.setProperty("--gt-cookie-button-bg", theme.buttonBackground);
       root.setProperty("--gt-cookie-button-text", theme.buttonText);
     },
