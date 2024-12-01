@@ -13,7 +13,7 @@
 
     <!-- Content Message -->
     <div class="gt-cookie-widget__content">
-      <p>{{ content.widgetPillMessage }}</p>
+      <p v-html="getContentMessage"></p>
     </div>
 
     <!-- Preferences Button -->
@@ -21,13 +21,13 @@
       class="gt-cookie-widget__button gt-cookie-widget__button--naked"
       @click="openPreferences"
     >
-      Preferences
+      {{ content.widgetManagePreferencesButton }}
     </button>
 
     <!-- Accept All Action -->
     <div class="gt-cookie-widget__actions">
       <button class="gt-cookie-widget__button" @click="acceptAll">
-        Accept All
+        {{ content.widgetAcceptAllButton }}
       </button>
     </div>
   </div>
@@ -51,6 +51,23 @@ export default {
         appearance: "pill",
         position: "center",
       }),
+    },
+  },
+  computed: {
+    getContentMessage() {
+      if (this.layout.appearance === "pill") {
+        return this.content.widgetPillMessage;
+      }
+
+      let message = this.content.widgetBannerMessage || "";
+
+      // Replace [cookiepolicy] with a link
+      if (message.includes("[cookiepolicy]")) {
+        const policyLink = `<a href="${this.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
+        message = message.replace("[cookiepolicy]", policyLink);
+      }
+
+      return message;
     },
   },
   methods: {

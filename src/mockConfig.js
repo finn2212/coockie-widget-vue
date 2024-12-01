@@ -16,7 +16,7 @@ export const mockConfig = {
     cookiePolicyLinkText: "Cookie Policy",
     dialogTitle: "Your Cookie Preferences",
     dialog_message:
-      "We use cookies to improve your experience on this website. You may choose which types of cookies to allow and change your preferences at any time. Disabling cookies may impact your experience on this website. You can learn more by viewing our Cookie Policy.",
+      "We use cookies to improve your experience on this website. You may choose which types of cookies to allow and change your preferences at any time. Disabling cookies may impact your experience on this website. You can learn more by viewing our [cookiepolicy]",
     dialogSavePreferencesButton: "Save Preferences",
     dialogAcceptAllButton: "Accept All Cookies",
     dialogRejectAllButton: "Reject All Cookies",
@@ -135,4 +135,11 @@ export const mockConfig = {
       ],
     },
   },
+};
+
+export const fetchMockConfig = async () => {
+  // Simulate an API call delay
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(mockConfig), 500);
+  });
 };

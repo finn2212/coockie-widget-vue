@@ -6,9 +6,9 @@
     >
       <thead>
         <tr>
-          <th align="left">Platform</th>
-          <th align="left">Name &amp; Description</th>
-          <th align="right">Retention</th>
+          <th align="left">{{ content.cookieHeadingPlatform }}</th>
+          <th align="left">{{ content.cookieHeadingNameDescription }}</th>
+          <th align="right">{{ content.cookieHeadingRetention }}</th>
         </tr>
       </thead>
       <tbody>
@@ -43,6 +43,9 @@ export default {
     isExpanded: {
       type: Boolean,
       required: true,
+    },
+    content: {
+      type: Object,
     },
   },
 };

@@ -39,14 +39,11 @@
 
       <!-- Dialog Heading -->
       <h2 class="gt-cookie-dialog__heading" id="gt-cookie-dialog-heading">
-        {{ config.dialogTitle }}
+        {{ content.dialogTitle }}
       </h2>
 
       <!-- Dialog Content -->
-      <p class="gt-cookie-dialog__content">
-        {{ config.dialog_message }}
-        <a href="https://getterms.io/">Cookie Policy</a>
-      </p>
+      <p class="gt-cookie-dialog__content" v-html="processedDialogMessage"></p>
 
       <!-- Cookie Form -->
       <form class="gt-cookie-dialog__form">
@@ -105,8 +102,10 @@
             class="gt-cookie-dialog__table-toggle"
             @click="toggleTable(key)"
           >
-            <span v-if="!expandedTables[key]">Show</span>
-            <span v-else>Hide</span>
+            <span v-if="!expandedTables[key]">{{
+              content.widgetShowCookiesButton
+            }}</span>
+            <span v-else>{{ content.widgetHideCookiesButton }}</span>
           </button>
 
           <!-- Description -->
@@ -122,6 +121,7 @@
             :tableId="'table-' + category.key"
             :cookies="category.cookies"
             :isExpanded="expandedTables[key]"
+            :content="content"
           ></cookie-table>
         </div>
       </form>
@@ -133,14 +133,14 @@
           class="gt-cookie-dialog__button gt-cookie-dialog__button--stroke"
           @click="savePreferences"
         >
-          Save Preferences
+          {{ content.dialogSavePreferencesButton }}
         </button>
         <button
           type="button"
           class="gt-cookie-dialog__button"
           @click="acceptAll"
         >
-          Accept All Cookies
+          {{ content.dialogAcceptAllButton }}
         </button>
       </div>
     </div>
@@ -157,12 +157,8 @@ export default {
       type: Boolean,
       default: false,
     },
-    config: {
+    content: {
       type: Object,
-      default: () => ({
-        dialog_title: "Manage Cookies",
-        dialog_message: "Select your cookie preferences below.",
-      }),
     },
     cookies: {
       type: Array,
@@ -192,6 +188,19 @@ export default {
     return {
       expandedTables: {}, // Tracks whether each table is expanded
     };
+  },
+  computed: {
+    processedDialogMessage() {
+      let message = this.content.dialog_message || "";
+
+      // Replace [cookiepolicy] with a link
+      if (message.includes("[cookiepolicy]")) {
+        const policyLink = `<a href="${this.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
+        message = message.replace("[cookiepolicy]", policyLink);
+      }
+
+      return message;
+    },
   },
   methods: {
     toggleTable(key) {

@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { fetchMockConfig } from "@/services/MockApiService";
+import { fetchMockConfig } from "@/mockConfig";
 
 export default createStore({
   state: {
