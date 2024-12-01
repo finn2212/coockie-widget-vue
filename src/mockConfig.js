@@ -8,8 +8,8 @@ export const mockConfig = {
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "pill", // Can be 'pill', 'banner', 'popup', or 'card'
-    position: "center", // Can be 'left', 'center', or 'right'
+    appearance: "banner", // Can be 'pill', 'banner', 'popup', or 'card'
+    position: "left", // Can be 'left', 'center', or 'right'
   },
   content: {
     cookiePolicyUrl: "https://getterms.io/cookie-policy",

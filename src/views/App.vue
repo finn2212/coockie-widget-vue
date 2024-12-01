@@ -49,7 +49,7 @@ export default {
     loadConfig() {
       this.config = mockConfig;
       this.cookies = mockConfig.cookies;
-      console.log(mockConfig);
+      this.setThemeVariables(mockConfig.theme);
     },
     openDialog() {
       this.isDialogOpen = true;
@@ -63,6 +63,14 @@ export default {
       this.cookies = updatedCookies;
       console.log("Preferences saved:", this.cookies);
       this.closeDialog();
+    },
+    setThemeVariables(theme) {
+      const root = document.documentElement.style;
+      root.setProperty("--gt-cookie-bg", theme.background);
+      root.setProperty("--gt-cookie-text", theme.text);
+      root.setProperty("--gt-cookie-link-text", theme.linkText);
+      root.setProperty("--gt-cookie-button-bg", theme.buttonBackground);
+      root.setProperty("--gt-cookie-button-text", theme.buttonText);
     },
   },
 };
