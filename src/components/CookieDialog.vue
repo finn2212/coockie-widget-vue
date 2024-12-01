@@ -90,7 +90,7 @@
               </svg>
             </div>
             <span class="gt-cookie-dialog__checkbox-label">
-              {{ category.label }}
+              {{ getCategoryTitle(category.slug) }}
               <span class="gt-cookie-dialog__checkbox-total">
                 ({{ category.total }})
               </span>
@@ -113,7 +113,7 @@
             class="gt-cookie-dialog__checkbox-description"
             :id="'description-' + category.name"
           >
-            {{ category.description }}
+            {{ getCategoryDescription(category.slug) }}
           </span>
 
           <!-- Cookie Table -->
@@ -219,6 +219,28 @@ export default {
     },
     closeDialog() {
       this.$emit("close-dialog");
+    },
+    getCategoryTitle(categoryName) {
+      const titleMapping = {
+        "essential-cookies": this.content.cookieEssentialTitle,
+        functional: this.content.cookieFunctionalTitle,
+        marketing: this.content.cookieMarketingTitle,
+        analytics: this.content.cookieAnalyticsTitle,
+        unclassified: this.content.cookieUnclassifiedTitle,
+      };
+
+      return titleMapping[categoryName] || "Unknown Category";
+    },
+    getCategoryDescription(categoryName) {
+      const descriptionMapping = {
+        "essential-cookies": this.content.cookieEssentialDescription,
+        functional: this.content.cookieFunctionalDescription,
+        marketing: this.content.cookieMarketingDescription,
+        analytics: this.content.cookieAnalyticsDescription,
+        unclassified: this.content.cookieUnclassifiedDescription,
+      };
+
+      return descriptionMapping[categoryName] || "No description available.";
     },
     beforeEnter(el) {
       el.style.opacity = 0;
