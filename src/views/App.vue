@@ -15,13 +15,16 @@
         :functionality="config.functionality"
         @open-dialog="openDialog"
         @accept-all="acceptAllCookies"
+        @reject-all="rejectAll"
       />
       <CookieDialog
         v-if="isDialogOpen"
         :isDialogOpen="isDialogOpen"
         :content="config.content"
         :cookies="cookies"
+        :functionality="config.functionality"
         @close-dialog="closeDialog"
+        @reject-all="rejectAll"
         @save-preferences="savePreferences"
       />
     </div>
@@ -61,6 +64,16 @@ export default {
       console.log("Closing dialog..." + this.isDialogOpen);
     },
     savePreferences(updatedCookies) {
+      this.cookies = updatedCookies;
+      console.log("Preferences saved:", this.cookies);
+      this.closeDialog();
+    },
+    acceptAllCookies(updatedCookies) {
+      this.cookies = updatedCookies;
+      console.log("Preferences saved:", this.cookies);
+      this.closeDialog();
+    },
+    rejectAll(updatedCookies) {
       this.cookies = updatedCookies;
       console.log("Preferences saved:", this.cookies);
       this.closeDialog();

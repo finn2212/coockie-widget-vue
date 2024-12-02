@@ -136,6 +136,14 @@
           {{ content.dialogSavePreferencesButton }}
         </button>
         <button
+          v-if="functionality.hasRejectAll"
+          type="button"
+          class="gt-cookie-dialog__button gt-cookie-dialog__button--stroke"
+          @click="rejactAll"
+        >
+          {{ content.dialogRejectAllButton }}
+        </button>
+        <button
           type="button"
           class="gt-cookie-dialog__button"
           @click="acceptAll"
@@ -160,28 +168,11 @@ export default {
     content: {
       type: Object,
     },
+    functionality: {
+      type: Object,
+    },
     cookies: {
       type: Array,
-      default: () => [
-        {
-          name: "essential-cookies",
-          label: "Essential Cookies",
-          description:
-            "Cookies required to enable basic website functionality.",
-          accepted: true,
-          disabled: true,
-          total: 5,
-        },
-        {
-          name: "functional",
-          label: "Functional Cookies",
-          description:
-            "Cookies that are used to enhance the functionality of the website.",
-          accepted: false,
-          disabled: false,
-          total: 3,
-        },
-      ],
     },
   },
   data() {
@@ -216,6 +207,10 @@ export default {
       // });
       console.log("All cookies accepted!");
       this.$emit("accept-all");
+    },
+    rejectAll() {
+      this.$emit("reject-all");
+      console.log("Rejecting all cookies...");
     },
     closeDialog() {
       this.$emit("close-dialog");

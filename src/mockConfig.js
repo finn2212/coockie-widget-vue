@@ -48,7 +48,7 @@ export const mockConfig = {
     cookieHeadingRetention: "Retention",
   },
   functionality: {
-    allowPreferences: true, // Allows users to manage preferences
+    allowPreferences: false, // Allows users to manage preferences
     blockInteraction: false, // Prevents interaction until consent is given
     blockScripts: true, // Blocks third-party scripts before consent
     hasRejectAll: true, // Adds a 'Reject All' button
