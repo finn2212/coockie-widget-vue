@@ -198,19 +198,22 @@ export default {
       this.expandedTables[key] = !this.expandedTables[key];
     },
     savePreferences() {
-      console.log("Preferences saved!", this.cookies);
       this.$emit("save-preferences", this.cookies);
     },
     acceptAll() {
-      // this.cookies.forEach((cookie) => {
-      //   if (!cookie.disabled) cookie.accepted = true;
-      // });
-      console.log("All cookies accepted!");
-      this.$emit("accept-all");
+      const updatedCookies = this.cookies.map((cookie) => ({
+        ...cookie,
+        accepted: true,
+      }));
+      this.$emit("save-preferences", updatedCookies);
     },
+
     rejectAll() {
-      this.$emit("reject-all");
-      console.log("Rejecting all cookies...");
+      const updatedCookies = this.cookies.map((cookie) => ({
+        ...cookie,
+        accepted: false,
+      }));
+      this.$emit("save-preferences", updatedCookies);
     },
     closeDialog() {
       this.$emit("close-dialog");

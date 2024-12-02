@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import CookieService from "@/services/CookieService";
 import { mockConfig } from "@/mockConfig"; // Adjust the path as needed
 import CookieBanner from "@/components/CookieBanner.vue";
 import CookieDialog from "@/components/CookieDialog.vue";
@@ -51,8 +52,34 @@ export default {
   },
   methods: {
     loadConfig() {
+      // Assign the mock configuration
       this.config = mockConfig;
-      this.cookies = mockConfig.cookies;
+      const defaultCookies = mockConfig.cookies;
+
+      // Load saved preferences from localStorage
+      const savedPreferences = CookieService.getItem("cookie_preferences");
+
+      // Update cookies with saved preferences
+      this.cookies = Object.keys(defaultCookies).reduce((result, key) => {
+        const category = defaultCookies[key];
+
+        result[key] = {
+          ...category,
+          accepted:
+            savedPreferences && savedPreferences[key] !== undefined
+              ? savedPreferences[key].accepted // Use saved preference if it exists
+              : category.defaultAccepted || false, // Use defaultAccepted if no preference saved
+        };
+        return result;
+      }, {});
+
+      // Apply saved preferences to block cookies
+      const blockedCategories = this.getBlockedCategories(
+        savedPreferences || {}
+      );
+      CookieService.blockCookies(blockedCategories);
+
+      // Apply theme variables
       this.setThemeVariables(mockConfig.theme);
     },
     openDialog() {
@@ -65,18 +92,38 @@ export default {
     },
     savePreferences(updatedCookies) {
       this.cookies = updatedCookies;
-      console.log("Preferences saved:", this.cookies);
+      console.log(updatedCookies);
+      CookieService.setItem("cookie_preferences", updatedCookies);
+      const blockedCategories = this.getBlockedCategories(updatedCookies);
+      CookieService.blockCookies(blockedCategories);
       this.closeDialog();
     },
-    acceptAllCookies(updatedCookies) {
-      this.cookies = updatedCookies;
-      console.log("Preferences saved:", this.cookies);
-      this.closeDialog();
+    acceptAllCookies() {
+      const allAccepted = Object.keys(this.cookies).reduce((prefs, key) => {
+        prefs[key] = true;
+        return prefs;
+      }, {});
+      this.savePreferences(allAccepted);
     },
-    rejectAll(updatedCookies) {
-      this.cookies = updatedCookies;
-      console.log("Preferences saved:", this.cookies);
-      this.closeDialog();
+    rejectAll() {
+      const allRejected = Object.keys(this.cookies).reduce((prefs, key) => {
+        prefs[key] = false;
+        return prefs;
+      }, {});
+      this.savePreferences(allRejected);
+    },
+    getBlockedCategories(preferences) {
+      const blockedCategories = [];
+
+      Object.keys(preferences).forEach((category) => {
+        if (!this.config.cookies[category]) {
+          console.warn(`Unknown category: ${category}`);
+        } else if (!preferences[category]) {
+          blockedCategories.push(...this.config.cookies[category].keys);
+        }
+      });
+
+      return blockedCategories;
     },
     setThemeVariables(theme) {
       const root = document.documentElement.style;

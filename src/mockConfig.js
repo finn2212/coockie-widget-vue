@@ -48,7 +48,7 @@ export const mockConfig = {
     cookieHeadingRetention: "Retention",
   },
   functionality: {
-    allowPreferences: false, // Allows users to manage preferences
+    allowPreferences: true, // Allows users to manage preferences
     blockInteraction: false, // Prevents interaction until consent is given
     blockScripts: true, // Blocks third-party scripts before consent
     hasRejectAll: true, // Adds a 'Reject All' button
@@ -60,7 +60,8 @@ export const mockConfig = {
       slug: "essential-cookies",
       description: "Cookies required to enable basic website functionality.",
       total: 0,
-      keys: [],
+      keys: ["XSRF-TOKEN"],
+      accepted: false,
       cookies: [],
     },
     functional: {
@@ -70,6 +71,7 @@ export const mockConfig = {
         "Cookies that are used to enhance the functionality of the website.",
       total: 1,
       keys: ["XSRF-TOKEN"],
+      accepted: false,
       cookies: [
         {
           key: "XSRF-TOKEN",
@@ -91,6 +93,7 @@ export const mockConfig = {
         "Cookies used to deliver advertising that is more relevant to your interests.",
       total: 1,
       keys: ["_gcl_au"],
+      accepted: false,
       cookies: [
         {
           key: "_gcl_au",
@@ -113,6 +116,7 @@ export const mockConfig = {
         "Cookies that are used to enhance the functionality of the website.",
       total: 1,
       keys: ["XSRF-TOKEN"],
+      accepted: false,
       cookies: [
         {
           key: "XSRF-TOKEN",
