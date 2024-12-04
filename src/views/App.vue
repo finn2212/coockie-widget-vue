@@ -63,20 +63,28 @@ export default {
 
       // Load saved preferences from localStorage
       const savedPreferences = CookieService.getItem("cookie_preferences");
+      // eslint-disable-next-line no-debugger
+      debugger;
 
       // Update cookies with saved preferences
       this.cookies = Object.keys(defaultCookies).reduce((result, key) => {
         const category = defaultCookies[key];
+        // eslint-disable-next-line no-debugger
+        debugger;
 
         result[key] = {
           ...category,
           accepted:
-            savedPreferences && savedPreferences[key] !== undefined
+            savedPreferences &&
+            savedPreferences[key] !== undefined &&
+            savedPreferences[key].accepted !== undefined
               ? savedPreferences[key].accepted // Use saved preference if it exists
               : category.defaultAccepted || false, // Use defaultAccepted if no preference saved
         };
         return result;
       }, {});
+      // eslint-disable-next-line no-debugger
+      debugger;
 
       // Apply saved preferences to block cookies
       const blockedCategories = this.getBlockedCategories(
@@ -111,11 +119,28 @@ export default {
       this.savePreferences(allAccepted);
     },
     rejectAll() {
-      const allRejected = Object.keys(this.cookies).reduce((prefs, key) => {
-        prefs[key] = false;
-        return prefs;
-      }, {});
-      this.savePreferences(allRejected);
+      // eslint-disable-next-line no-debugger
+      // Loop through all categories in this.cookies and set accepted to false
+      Object.keys(this.cookies).forEach((key) => {
+        if (this.cookies[key].accepted !== undefined) {
+          this.cookies[key].accepted = false; // Set accepted to false
+        }
+      });
+
+      // Save the updated preferences
+      const updatedPreferences = Object.keys(this.cookies).reduce(
+        (prefs, key) => {
+          prefs[key] = {
+            ...this.cookies[key],
+            accepted: this.cookies[key].accepted,
+          };
+          return prefs;
+        },
+        {}
+      );
+
+      // Save preferences to storage
+      this.savePreferences(updatedPreferences);
     },
     getBlockedCategories(preferences) {
       const blockedCategories = [];
