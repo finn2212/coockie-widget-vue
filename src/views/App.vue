@@ -6,6 +6,7 @@
     </div>
     <div
       v-else
+      ref="wrapperElement"
       class="gt-cookie-widget-wrapper"
       data-gt-cookie-widget-shown="true"
     >
@@ -49,6 +50,10 @@ export default {
   created() {
     // Mock loading the config and cookies
     this.loadConfig();
+  },
+  mounted() {
+    // Apply font correction after mounting
+    this.correctFontFamily();
   },
   methods: {
     loadConfig() {
@@ -125,6 +130,24 @@ export default {
 
       return blockedCategories;
     },
+    correctFontFamily() {
+      const wrapperElement = this.$refs.wrapperElement; // Reference the wrapper element
+      // eslint-disable-next-line no-debugger
+      debugger;
+      if (!wrapperElement) return;
+
+      const originalFontFamily =
+        window.getComputedStyle(wrapperElement).fontFamily;
+      wrapperElement.style.setProperty("font-family", "initial");
+      const defaultFontFamily =
+        window.getComputedStyle(wrapperElement).fontFamily;
+
+      if (originalFontFamily === defaultFontFamily) {
+        wrapperElement.style.setProperty("font-family", "sans-serif");
+      } else {
+        wrapperElement.style.removeProperty("font-family");
+      }
+    },
     setThemeVariables(theme) {
       const root = document.documentElement.style;
       root.setProperty("--gt-cookie-bg", theme.background);
@@ -132,6 +155,7 @@ export default {
       root.setProperty("--gt-cookie-link-text", theme.linkText);
       root.setProperty("--gt-cookie-button-bg", theme.buttonBackground);
       root.setProperty("--gt-cookie-button-text", theme.buttonText);
+      root.setProperty("--gt-cookie-font-size", theme.fontSize);
     },
   },
 };

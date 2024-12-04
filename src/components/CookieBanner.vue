@@ -87,12 +87,10 @@ export default {
   },
   methods: {
     acceptAll() {
-      console.log("Cookies accepted!");
       // Emit an event to the parent for handling "accept all" logic
       this.$emit("accept-all");
     },
     openPreferences() {
-      console.log("Opening preferences dialog...");
       // Emit an event to the parent for opening the dialog
       this.$emit("open-dialog");
     },
@@ -105,7 +103,6 @@ export default {
     },
     rejectAll() {
       this.$emit("reject-all");
-      console.log("Rejecting all cookies...");
     },
   },
 };

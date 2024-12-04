@@ -90,7 +90,7 @@
               </svg>
             </div>
             <span class="gt-cookie-dialog__checkbox-label">
-              {{ getCategoryTitle(category.slug) }}
+              {{ getCategoryTitle(category.label) }}
               <span class="gt-cookie-dialog__checkbox-total">
                 ({{ category.total }})
               </span>
@@ -111,16 +111,16 @@
           <!-- Description -->
           <span
             class="gt-cookie-dialog__checkbox-description"
-            :id="'description-' + category.name"
+            :id="'description-' + category.label"
           >
-            {{ getCategoryDescription(category.slug) }}
+            {{ getCategoryDescription(category.label) }}
           </span>
 
           <!-- Cookie Table -->
           <cookie-table
             :tableId="'table-' + category.key"
             :cookies="category.cookies"
-            :isExpanded="expandedTables[key]"
+            :isExpanded="expandedTables[key] || false"
             :content="content"
           ></cookie-table>
         </div>
@@ -172,7 +172,7 @@ export default {
       type: Object,
     },
     cookies: {
-      type: Array,
+      type: Object,
     },
   },
   data() {
@@ -220,25 +220,25 @@ export default {
     },
     getCategoryTitle(categoryName) {
       const titleMapping = {
-        "essential-cookies": this.content.cookieEssentialTitle,
-        functional: this.content.cookieFunctionalTitle,
-        marketing: this.content.cookieMarketingTitle,
-        analytics: this.content.cookieAnalyticsTitle,
-        unclassified: this.content.cookieUnclassifiedTitle,
+        "Essential Cookies": this.content.cookieEssentialTitle,
+        "Functional Cookies": this.content.cookieFunctionalTitle,
+        "Advertising Cookies": this.content.cookieMarketingTitle,
+        "Performance Cookies": this.content.cookieAnalyticsTitle,
+        Unclassified: this.content.cookieUnclassifiedTitle,
       };
 
-      return titleMapping[categoryName] || "Unknown Category";
+      return titleMapping[categoryName] || categoryName;
     },
-    getCategoryDescription(categoryName) {
+    getCategoryDescription(categoryDescription) {
       const descriptionMapping = {
-        "essential-cookies": this.content.cookieEssentialDescription,
-        functional: this.content.cookieFunctionalDescription,
-        marketing: this.content.cookieMarketingDescription,
-        analytics: this.content.cookieAnalyticsDescription,
+        "Essential Cookies": this.content.cookieEssentialDescription,
+        "Functional Cookies": this.content.cookieFunctionalDescription,
+        "Advertising Cookies": this.content.cookieMarketingDescription,
+        "Performance Cookies": this.content.cookieAnalyticsDescription,
         unclassified: this.content.cookieUnclassifiedDescription,
       };
 
-      return descriptionMapping[categoryName] || "No description available.";
+      return descriptionMapping[categoryDescription] || categoryDescription;
     },
     beforeEnter(el) {
       el.style.opacity = 0;
