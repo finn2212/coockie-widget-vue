@@ -18,10 +18,10 @@
           </a>
         </td>
         <td align="left">
-          <strong>{{ cookie.name }}</strong>
-          <span>{{ cookie.description }} </span>
+          <strong>{{ cookie.name || " " }}</strong>
+          <span>{{ cookie.description || " " }} </span>
         </td>
-        <td align="right">{{ cookie.retention }}</td>
+        <td align="right">{{ cookie.retention || " " }}</td>
       </tr>
     </tbody>
   </table>

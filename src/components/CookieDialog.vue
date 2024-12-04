@@ -48,12 +48,12 @@
       <!-- Cookie Form -->
       <form class="gt-cookie-dialog__form">
         <div
-          v-for="(category, key) in cookies"
+          v-for="(category, key, index) in cookies"
           :key="key"
           :class="[
             'gt-cookie-dialog__checkbox-wrapper',
             {
-              'gt-cookie-dialog__checkbox-wrapper--disabled': category.disabled,
+              'gt-cookie-dialog__checkbox-wrapper--disabled': index === 0,
             },
           ]"
         >
@@ -139,7 +139,7 @@
           v-if="functionality.hasRejectAll"
           type="button"
           class="gt-cookie-dialog__button gt-cookie-dialog__button--stroke"
-          @click="rejactAll"
+          @click="rejectAll"
         >
           {{ content.dialogRejectAllButton }}
         </button>
@@ -201,19 +201,11 @@ export default {
       this.$emit("save-preferences", this.cookies);
     },
     acceptAll() {
-      const updatedCookies = this.cookies.map((cookie) => ({
-        ...cookie,
-        accepted: true,
-      }));
-      this.$emit("save-preferences", updatedCookies);
+      this.$emit("accept-all");
     },
 
     rejectAll() {
-      const updatedCookies = this.cookies.map((cookie) => ({
-        ...cookie,
-        accepted: false,
-      }));
-      this.$emit("save-preferences", updatedCookies);
+      this.$emit("reject-all");
     },
     closeDialog() {
       this.$emit("close-dialog");
@@ -239,19 +231,6 @@ export default {
       };
 
       return descriptionMapping[categoryDescription] || categoryDescription;
-    },
-    beforeEnter(el) {
-      el.style.opacity = 0;
-    },
-    enter(el, done) {
-      el.style.transition = "opacity 0.2s ease-in-out";
-      el.style.opacity = 1;
-      setTimeout(done, 200); // Match the duration of your animation
-    },
-    leave(el, done) {
-      el.style.transition = "opacity 0.2s ease-in-out";
-      el.style.opacity = 0;
-      setTimeout(done, 200); // Match the duration of your animation
     },
   },
 };

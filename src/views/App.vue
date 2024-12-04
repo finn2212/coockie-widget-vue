@@ -27,6 +27,7 @@
         @close-dialog="closeDialog"
         @reject-all="rejectAll"
         @save-preferences="savePreferences"
+        @accept-all="acceptAllCookies"
       />
     </div>
   </div>
@@ -63,14 +64,10 @@ export default {
 
       // Load saved preferences from localStorage
       const savedPreferences = CookieService.getItem("cookie_preferences");
-      // eslint-disable-next-line no-debugger
-      debugger;
 
       // Update cookies with saved preferences
       this.cookies = Object.keys(defaultCookies).reduce((result, key) => {
         const category = defaultCookies[key];
-        // eslint-disable-next-line no-debugger
-        debugger;
 
         result[key] = {
           ...category,
@@ -83,8 +80,6 @@ export default {
         };
         return result;
       }, {});
-      // eslint-disable-next-line no-debugger
-      debugger;
 
       // Apply saved preferences to block cookies
       const blockedCategories = this.getBlockedCategories(
@@ -97,11 +92,9 @@ export default {
     },
     openDialog() {
       this.isDialogOpen = true;
-      console.log(this.isDialogOpen);
     },
     closeDialog() {
       this.isDialogOpen = false;
-      console.log("Closing dialog..." + this.isDialogOpen);
     },
     savePreferences(updatedCookies) {
       this.cookies = updatedCookies;
@@ -111,19 +104,11 @@ export default {
       CookieService.blockCookies(blockedCategories);
       this.closeDialog();
     },
-    acceptAllCookies() {
-      const allAccepted = Object.keys(this.cookies).reduce((prefs, key) => {
-        prefs[key] = true;
-        return prefs;
-      }, {});
-      this.savePreferences(allAccepted);
-    },
-    rejectAll() {
-      // eslint-disable-next-line no-debugger
-      // Loop through all categories in this.cookies and set accepted to false
+    updateAllCookiesStatus(accepted) {
+      // Loop through all categories and set the accepted status
       Object.keys(this.cookies).forEach((key) => {
         if (this.cookies[key].accepted !== undefined) {
-          this.cookies[key].accepted = false; // Set accepted to false
+          this.cookies[key].accepted = accepted;
         }
       });
 
@@ -142,6 +127,16 @@ export default {
       // Save preferences to storage
       this.savePreferences(updatedPreferences);
     },
+
+    acceptAllCookies() {
+      this.updateAllCookiesStatus(true); // Set all cookies to accepted
+      this.closeDialog();
+    },
+
+    rejectAll() {
+      this.updateAllCookiesStatus(false); // Set all cookies to rejected
+      this.closeDialog();
+    },
     getBlockedCategories(preferences) {
       const blockedCategories = [];
 
@@ -157,8 +152,6 @@ export default {
     },
     correctFontFamily() {
       const wrapperElement = this.$refs.wrapperElement; // Reference the wrapper element
-      // eslint-disable-next-line no-debugger
-      debugger;
       if (!wrapperElement) return;
 
       const originalFontFamily =
