@@ -1,6 +1,6 @@
 export const mockConfig = {
   theme: {
-    fontSize: "12px",
+    fontSize: "14px",
     background: "#ffffff",
     text: "#111111",
     linkText: "#065AF9",
@@ -8,8 +8,8 @@ export const mockConfig = {
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "popup", // Can be 'pill', 'banner', 'popup', or 'card'
-    position: "left", // Can be 'left', 'center', or 'right'
+    appearance: "pill", // Can be 'pill', 'banner', 'popup', or 'card'
+    position: "center", // Can be 'left', 'center', or 'right'
   },
   content: {
     cookiePolicyUrl: "https://getterms.io/cookie-policy",
@@ -49,7 +49,7 @@ export const mockConfig = {
   },
   functionality: {
     allowPreferences: true, // Allows users to manage preferences
-    blockInteraction: false, // Prevents interaction until consent is given
+    blockInteraction: true, // Prevents interaction until consent is given
     blockScripts: true, // Blocks third-party scripts before consent
     hasRejectAll: true, // Adds a 'Reject All' button
     googleConsentMode: true, // Integrates with Google Consent Mode

@@ -8,6 +8,10 @@
       v-else
       ref="wrapperElement"
       class="gt-cookie-widget-wrapper"
+      :class="{
+        'gt-cookie-widget-wrapper--block':
+          config.functionality.blockInteraction,
+      }"
       data-gt-cookie-widget-shown="true"
     >
       <CookieBanner
@@ -53,10 +57,6 @@ export default {
     // Mock loading the config and cookies
     this.loadConfig();
   },
-  mounted() {
-    // Apply font correction using ThemeService
-    ThemeService.correctFontFamily(this.$refs.wrapperElement);
-  },
   methods: {
     loadConfig() {
       // Assign the mock configuration
@@ -68,6 +68,8 @@ export default {
         this.config
       );
 
+      // Apply font correction using ThemeService
+      ThemeService.correctFontFamily(this.$refs.wrapperElement);
       // Apply theme variables using ThemeService
       ThemeService.setThemeVariables(mockConfig.theme);
     },
