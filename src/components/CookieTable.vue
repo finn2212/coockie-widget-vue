@@ -14,14 +14,14 @@
       <tr v-for="cookie in cookies" :key="cookie.name">
         <td align="left">
           <a :href="cookie.platformUrl || '#'" target="_blank">
-            {{ cookie.platform }}
+            {{ cookie.platform || cookie.key }}
           </a>
         </td>
         <td align="left">
-          <strong>{{ cookie.name || " " }}</strong>
-          <span>{{ cookie.description || " " }} </span>
+          <strong>{{ cookie.platform || cookie.key }}</strong>
+          <span>{{ cookie.description || "Unknown" }} </span>
         </td>
-        <td align="right">{{ cookie.retention || " " }}</td>
+        <td align="right">{{ cookie.retention || "Unknown" }}</td>
       </tr>
     </tbody>
   </table>

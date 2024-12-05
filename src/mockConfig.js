@@ -1,4 +1,6 @@
 export const mockConfig = {
+  api_base: "https://app.getterms.io/api/cookie-consent",
+  uuid: "58238475-1bb5-4745-8cd8-667f773c422b",
   theme: {
     fontSize: "14px",
     background: "#ffffff",

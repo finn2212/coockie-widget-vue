@@ -1,4 +1,6 @@
 const STORAGE_KEY = "getterms_cookie_consent";
+import GTMService from "@/services/GTMService";
+import LogService from "./LogService";
 
 export default {
   getItem(key) {
@@ -96,17 +98,19 @@ export default {
   },
 
   updateAllCookiesStatus(cookies, accepted, config) {
-    return Object.keys(cookies).reduce((updatedCookies, key, index) => {
-      updatedCookies[key] = {
+    const newCoockies = Object.keys(cookies).reduce((result, key, index) => {
+      result[key] = {
         ...cookies[key],
         accepted: index === 0 ? true : accepted, // Ensure essential cookies remain accepted
       };
-      this.savePreferences(updatedCookies, config);
-      return updatedCookies;
+      return result; // Return the accumulator to maintain the state
     }, {});
+
+    this.savePreferences(newCoockies, config);
+    return newCoockies;
   },
 
-  savePreferences(cookies, config) {
+  async savePreferences(cookies, config) {
     const preferences = Object.keys(cookies).reduce((prefs, key) => {
       prefs[key] = {
         ...cookies[key],
@@ -115,6 +119,28 @@ export default {
       return prefs;
     }, {});
     this.setItem("cookie_preferences", preferences);
+    /** If there is no UUID create one */
+    const userId = this.getItem("user_id");
+    if (
+      !userId ||
+      (typeof userId === "object" && Object.keys(userId).length === 0)
+    ) {
+      this.setItem("user_id", this.generateUUID());
+    }
+    //update GTM Google Consent here with owen fucntion
+    if (config.functionality) {
+      GTMService.updateConsent(preferences);
+    }
+
+    const user_id = await LogService.logPreferences(
+      preferences,
+      config,
+      false,
+      false
+    );
+    if (user_id) {
+      this.setItem("user_id", user_id);
+    }
     this.blockCookies(preferences, config);
   },
   getBlockedCategories(preferences, config) {
@@ -129,5 +155,15 @@ export default {
     });
 
     return blockedCategories;
+  },
+  generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   },
 };
