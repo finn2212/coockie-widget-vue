@@ -70,4 +70,44 @@ export default {
 
     Object.defineProperty(document, "cookie", originalCookieDescriptor);
   },
+
+  initializeCookies(defaultCookies, savedPreferences) {
+    return Object.keys(defaultCookies).reduce((result, key, index) => {
+      const category = defaultCookies[key];
+      result[key] = {
+        ...category,
+        accepted:
+          index === 0 // Ensure essential cookies are always accepted
+            ? true
+            : savedPreferences &&
+              savedPreferences[key] !== undefined &&
+              savedPreferences[key].accepted !== undefined
+            ? savedPreferences[key].accepted
+            : category.defaultAccepted || false,
+      };
+      return result;
+    }, {});
+  },
+
+  updateAllCookiesStatus(cookies, accepted) {
+    return Object.keys(cookies).reduce((updatedCookies, key, index) => {
+      updatedCookies[key] = {
+        ...cookies[key],
+        accepted: index === 0 ? true : accepted, // Ensure essential cookies remain accepted
+      };
+      return updatedCookies;
+    }, {});
+  },
+
+  savePreferences(cookies) {
+    const preferences = Object.keys(cookies).reduce((prefs, key) => {
+      prefs[key] = {
+        ...cookies[key],
+        accepted: cookies[key].accepted,
+      };
+      return prefs;
+    }, {});
+    this.setItem("cookie_preferences", preferences);
+    return preferences;
+  },
 };

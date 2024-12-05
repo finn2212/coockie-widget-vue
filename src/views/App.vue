@@ -35,7 +35,8 @@
 
 <script>
 import CookieService from "@/services/CookieService";
-import { mockConfig } from "@/mockConfig"; // Adjust the path as needed
+import ThemeService from "@/services/ThemeService";
+import { mockConfig } from "@/mockConfig";
 import CookieBanner from "@/components/CookieBanner.vue";
 import CookieDialog from "@/components/CookieDialog.vue";
 
@@ -53,8 +54,8 @@ export default {
     this.loadConfig();
   },
   mounted() {
-    // Apply font correction after mounting
-    this.correctFontFamily();
+    // Apply font correction using ThemeService
+    ThemeService.correctFontFamily(this.$refs.wrapperElement);
   },
   methods: {
     loadConfig() {
@@ -64,26 +65,9 @@ export default {
 
       // Load saved preferences from localStorage
       const savedPreferences = CookieService.getItem("cookie_preferences");
-
-      // Update cookies with saved preferences
-      this.cookies = Object.keys(defaultCookies).reduce(
-        (result, key, index) => {
-          const category = defaultCookies[key];
-
-          result[key] = {
-            ...category,
-            accepted:
-              index === 0 // Ensure essential cookies are always accepted
-                ? true
-                : savedPreferences &&
-                  savedPreferences[key] !== undefined &&
-                  savedPreferences[key].accepted !== undefined
-                ? savedPreferences[key].accepted // Use saved preference if it exists
-                : category.defaultAccepted || false, // Use defaultAccepted if no preference saved
-          };
-          return result;
-        },
-        {}
+      this.cookies = CookieService.initializeCookies(
+        defaultCookies,
+        savedPreferences
       );
 
       // Apply saved preferences to block cookies
@@ -92,8 +76,8 @@ export default {
       );
       CookieService.blockCookies(blockedCategories);
 
-      // Apply theme variables
-      this.setThemeVariables(mockConfig.theme);
+      // Apply theme variables using ThemeService
+      ThemeService.setThemeVariables(mockConfig.theme);
     },
     openDialog() {
       this.isDialogOpen = true;
@@ -102,38 +86,19 @@ export default {
       this.isDialogOpen = false;
     },
     savePreferences(updatedCookies) {
-      this.cookies = updatedCookies;
-      console.log(updatedCookies);
-      CookieService.setItem("cookie_preferences", updatedCookies);
-      const blockedCategories = this.getBlockedCategories(updatedCookies);
+      const preferences = CookieService.savePreferences(updatedCookies);
+      const blockedCategories = this.getBlockedCategories(preferences);
       CookieService.blockCookies(blockedCategories);
+      this.cookies = updatedCookies; // Update local state
       this.closeDialog();
     },
     updateAllCookiesStatus(accepted) {
-      // Loop through all categories and set the accepted status
-      Object.keys(this.cookies).forEach((key, index) => {
-        if (index === 0) {
-          // Ensure the first cookie (essential) is always accepted
-          this.cookies[key].accepted = true;
-        } else if (this.cookies[key].accepted !== undefined) {
-          this.cookies[key].accepted = accepted;
-        }
-      });
-
-      // Save the updated preferences
-      const updatedPreferences = Object.keys(this.cookies).reduce(
-        (prefs, key) => {
-          prefs[key] = {
-            ...this.cookies[key],
-            accepted: this.cookies[key].accepted,
-          };
-          return prefs;
-        },
-        {}
+      const updatedCookies = CookieService.updateAllCookiesStatus(
+        this.cookies,
+        accepted
       );
-
-      // Save preferences to storage
-      this.savePreferences(updatedPreferences);
+      this.savePreferences(updatedCookies);
+      // Save the updated preferen
     },
 
     acceptAllCookies() {
