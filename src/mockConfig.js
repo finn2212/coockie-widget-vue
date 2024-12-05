@@ -57,6 +57,7 @@ export const mockConfig = {
   cookies: {
     essential: {
       label: "Essential Cookies",
+      slug: "essential-cookies",
       description: "Cookies required to enable basic website functionality.",
       total: 0,
       keys: [],
@@ -64,6 +65,7 @@ export const mockConfig = {
     },
     functional: {
       label: "Functional Cookies",
+      slug: "functional",
       description:
         "Cookies that are used to enhance the functionality of the website.",
       total: 1,
@@ -83,6 +85,7 @@ export const mockConfig = {
     },
     marketing: {
       label: "Advertising Cookies",
+      slug: "marketing",
       description:
         "Cookies used to deliver advertising that is more relevant to your interests.",
       total: 0,
@@ -91,6 +94,7 @@ export const mockConfig = {
     },
     analytics: {
       label: "Performance Cookies",
+      slug: "analytics",
       description: "Cookies used to understand how the website is being used.",
       total: 0,
       keys: [],
@@ -98,6 +102,7 @@ export const mockConfig = {
     },
     unclassified: {
       label: "Unclassified",
+      slug: "unclassified",
       description: "Cookies that have not yet been categorised.",
       total: 12,
       keys: [

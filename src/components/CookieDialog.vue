@@ -90,7 +90,7 @@
               </svg>
             </div>
             <span class="gt-cookie-dialog__checkbox-label">
-              {{ getCategoryTitle(category.label) }}
+              {{ getCategoryTitle(category.slug) }}
               <span class="gt-cookie-dialog__checkbox-total">
                 ({{ category.total }})
               </span>
@@ -113,7 +113,7 @@
             class="gt-cookie-dialog__checkbox-description"
             :id="'description-' + category.label"
           >
-            {{ getCategoryDescription(category.label) }}
+            {{ getCategoryDescription(category.slug) }}
           </span>
 
           <!-- Cookie Table -->
@@ -210,27 +210,27 @@ export default {
     closeDialog() {
       this.$emit("close-dialog");
     },
-    getCategoryTitle(categoryName) {
+    getCategoryTitle(slug) {
       const titleMapping = {
-        "Essential Cookies": this.content.cookieEssentialTitle,
-        "Functional Cookies": this.content.cookieFunctionalTitle,
-        "Advertising Cookies": this.content.cookieMarketingTitle,
-        "Performance Cookies": this.content.cookieAnalyticsTitle,
-        Unclassified: this.content.cookieUnclassifiedTitle,
+        "essential-cookies": this.content.cookieEssentialTitle,
+        functional: this.content.cookieFunctionalTitle,
+        marketing: this.content.cookieMarketingTitle,
+        analytics: this.content.cookieAnalyticsTitle,
+        unclassified: this.content.cookieUnclassifiedTitle,
       };
 
-      return titleMapping[categoryName] || categoryName;
+      return titleMapping[slug] || slug;
     },
-    getCategoryDescription(categoryDescription) {
+    getCategoryDescription(slug) {
       const descriptionMapping = {
-        "Essential Cookies": this.content.cookieEssentialDescription,
-        "Functional Cookies": this.content.cookieFunctionalDescription,
-        "Advertising Cookies": this.content.cookieMarketingDescription,
-        "Performance Cookies": this.content.cookieAnalyticsDescription,
+        "essential-cookies": this.content.cookieEssentialDescription,
+        functional: this.content.cookieFunctionalDescription,
+        marketing: this.content.cookieMarketingDescription,
+        analytics: this.content.cookieAnalyticsDescription,
         unclassified: this.content.cookieUnclassifiedDescription,
       };
 
-      return descriptionMapping[categoryDescription] || categoryDescription;
+      return descriptionMapping[slug] || slug;
     },
   },
 };
