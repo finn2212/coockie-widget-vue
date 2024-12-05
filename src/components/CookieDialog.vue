@@ -63,7 +63,7 @@
               type="checkbox"
               :name="category.name"
               v-model="category.accepted"
-              :disabled="category.disabled"
+              :disabled="index === 0"
               class="gt-cookie-dialog__checkbox-input"
               :aria-describedby="'description-' + category.name"
             />

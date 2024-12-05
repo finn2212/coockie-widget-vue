@@ -66,20 +66,25 @@ export default {
       const savedPreferences = CookieService.getItem("cookie_preferences");
 
       // Update cookies with saved preferences
-      this.cookies = Object.keys(defaultCookies).reduce((result, key) => {
-        const category = defaultCookies[key];
+      this.cookies = Object.keys(defaultCookies).reduce(
+        (result, key, index) => {
+          const category = defaultCookies[key];
 
-        result[key] = {
-          ...category,
-          accepted:
-            savedPreferences &&
-            savedPreferences[key] !== undefined &&
-            savedPreferences[key].accepted !== undefined
-              ? savedPreferences[key].accepted // Use saved preference if it exists
-              : category.defaultAccepted || false, // Use defaultAccepted if no preference saved
-        };
-        return result;
-      }, {});
+          result[key] = {
+            ...category,
+            accepted:
+              index === 0 // Ensure essential cookies are always accepted
+                ? true
+                : savedPreferences &&
+                  savedPreferences[key] !== undefined &&
+                  savedPreferences[key].accepted !== undefined
+                ? savedPreferences[key].accepted // Use saved preference if it exists
+                : category.defaultAccepted || false, // Use defaultAccepted if no preference saved
+          };
+          return result;
+        },
+        {}
+      );
 
       // Apply saved preferences to block cookies
       const blockedCategories = this.getBlockedCategories(
@@ -106,8 +111,11 @@ export default {
     },
     updateAllCookiesStatus(accepted) {
       // Loop through all categories and set the accepted status
-      Object.keys(this.cookies).forEach((key) => {
-        if (this.cookies[key].accepted !== undefined) {
+      Object.keys(this.cookies).forEach((key, index) => {
+        if (index === 0) {
+          // Ensure the first cookie (essential) is always accepted
+          this.cookies[key].accepted = true;
+        } else if (this.cookies[key].accepted !== undefined) {
           this.cookies[key].accepted = accepted;
         }
       });
