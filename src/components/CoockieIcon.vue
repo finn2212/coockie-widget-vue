@@ -18,6 +18,5 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     ></path>
-    <!-- Additional paths go here -->
   </svg>
 </template>
