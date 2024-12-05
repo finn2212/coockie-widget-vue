@@ -17,7 +17,31 @@ export default {
     );
   },
 
-  blockCookies(blockList) {
+  initializeCookies(defaultCookies, config) {
+    // Load saved preferences from localStorage
+    const savedPreferences = this.getItem("cookie_preferences");
+    // Block Coockie preferences from localStorage
+    this.blockCookies(savedPreferences, config);
+    // return coockies with accpted property added
+    return Object.keys(defaultCookies).reduce((result, key, index) => {
+      const category = defaultCookies[key];
+      result[key] = {
+        ...category,
+        accepted:
+          index === 0 // Ensure essential cookies are always accepted
+            ? true
+            : savedPreferences &&
+              savedPreferences[key] !== undefined &&
+              savedPreferences[key].accepted !== undefined
+            ? savedPreferences[key].accepted
+            : category.defaultAccepted || false,
+      };
+      return result;
+    }, {});
+  },
+
+  blockCookies(preferences, config) {
+    const blockList = this.getBlockedCategories(preferences, config);
     const cookieString = document.cookie || ""; // Default to an empty string if undefined
     const existingCookies = cookieString.split("; "); // Safely split the string
 
@@ -71,35 +95,18 @@ export default {
     Object.defineProperty(document, "cookie", originalCookieDescriptor);
   },
 
-  initializeCookies(defaultCookies, savedPreferences) {
-    return Object.keys(defaultCookies).reduce((result, key, index) => {
-      const category = defaultCookies[key];
-      result[key] = {
-        ...category,
-        accepted:
-          index === 0 // Ensure essential cookies are always accepted
-            ? true
-            : savedPreferences &&
-              savedPreferences[key] !== undefined &&
-              savedPreferences[key].accepted !== undefined
-            ? savedPreferences[key].accepted
-            : category.defaultAccepted || false,
-      };
-      return result;
-    }, {});
-  },
-
-  updateAllCookiesStatus(cookies, accepted) {
+  updateAllCookiesStatus(cookies, accepted, config) {
     return Object.keys(cookies).reduce((updatedCookies, key, index) => {
       updatedCookies[key] = {
         ...cookies[key],
         accepted: index === 0 ? true : accepted, // Ensure essential cookies remain accepted
       };
+      this.savePreferences(updatedCookies, config);
       return updatedCookies;
     }, {});
   },
 
-  savePreferences(cookies) {
+  savePreferences(cookies, config) {
     const preferences = Object.keys(cookies).reduce((prefs, key) => {
       prefs[key] = {
         ...cookies[key],
@@ -108,6 +115,19 @@ export default {
       return prefs;
     }, {});
     this.setItem("cookie_preferences", preferences);
-    return preferences;
+    this.blockCookies(preferences, config);
+  },
+  getBlockedCategories(preferences, config) {
+    const blockedCategories = [];
+
+    Object.keys(preferences).forEach((category) => {
+      if (!config.cookies[category]) {
+        console.warn(`Unknown category: ${category}`);
+      } else if (!preferences[category]) {
+        blockedCategories.push(...config.cookies[category].keys);
+      }
+    });
+
+    return blockedCategories;
   },
 };

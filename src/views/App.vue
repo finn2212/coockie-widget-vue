@@ -63,18 +63,10 @@ export default {
       this.config = mockConfig;
       const defaultCookies = mockConfig.cookies;
 
-      // Load saved preferences from localStorage
-      const savedPreferences = CookieService.getItem("cookie_preferences");
       this.cookies = CookieService.initializeCookies(
         defaultCookies,
-        savedPreferences
+        this.config
       );
-
-      // Apply saved preferences to block cookies
-      const blockedCategories = this.getBlockedCategories(
-        savedPreferences || {}
-      );
-      CookieService.blockCookies(blockedCategories);
 
       // Apply theme variables using ThemeService
       ThemeService.setThemeVariables(mockConfig.theme);
@@ -86,67 +78,33 @@ export default {
       this.isDialogOpen = false;
     },
     savePreferences(updatedCookies) {
-      const preferences = CookieService.savePreferences(updatedCookies);
-      const blockedCategories = this.getBlockedCategories(preferences);
-      CookieService.blockCookies(blockedCategories);
-      this.cookies = updatedCookies; // Update local state
+      CookieService.savePreferences(updatedCookies, this.config);
+      this.cookies = updatedCookies;
       this.closeDialog();
-    },
-    updateAllCookiesStatus(accepted) {
-      const updatedCookies = CookieService.updateAllCookiesStatus(
-        this.cookies,
-        accepted
-      );
-      this.savePreferences(updatedCookies);
-      // Save the updated preferen
     },
 
     acceptAllCookies() {
-      this.updateAllCookiesStatus(true); // Set all cookies to accepted
+      // Set all cookies to accepted
+      const updatedCookies = CookieService.updateAllCookiesStatus(
+        this.cookies,
+        true,
+        this.config
+      );
+      this.cookies = updatedCookies;
+
       this.closeDialog();
     },
 
     rejectAll() {
-      this.updateAllCookiesStatus(false); // Set all cookies to rejected
+      // Set all cookies to not accepted
+      const updatedCookies = CookieService.updateAllCookiesStatus(
+        this.cookies,
+        false,
+        this.config
+      );
+      this.cookies = updatedCookies;
+
       this.closeDialog();
-    },
-    getBlockedCategories(preferences) {
-      const blockedCategories = [];
-
-      Object.keys(preferences).forEach((category) => {
-        if (!this.config.cookies[category]) {
-          console.warn(`Unknown category: ${category}`);
-        } else if (!preferences[category]) {
-          blockedCategories.push(...this.config.cookies[category].keys);
-        }
-      });
-
-      return blockedCategories;
-    },
-    correctFontFamily() {
-      const wrapperElement = this.$refs.wrapperElement; // Reference the wrapper element
-      if (!wrapperElement) return;
-
-      const originalFontFamily =
-        window.getComputedStyle(wrapperElement).fontFamily;
-      wrapperElement.style.setProperty("font-family", "initial");
-      const defaultFontFamily =
-        window.getComputedStyle(wrapperElement).fontFamily;
-
-      if (originalFontFamily === defaultFontFamily) {
-        wrapperElement.style.setProperty("font-family", "sans-serif");
-      } else {
-        wrapperElement.style.removeProperty("font-family");
-      }
-    },
-    setThemeVariables(theme) {
-      const root = document.documentElement.style;
-      root.setProperty("--gt-cookie-bg", theme.background);
-      root.setProperty("--gt-cookie-text", theme.text);
-      root.setProperty("--gt-cookie-link-text", theme.linkText);
-      root.setProperty("--gt-cookie-button-bg", theme.buttonBackground);
-      root.setProperty("--gt-cookie-button-text", theme.buttonText);
-      root.setProperty("--gt-cookie-font-size", theme.fontSize);
     },
   },
 };
