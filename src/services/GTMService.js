@@ -9,12 +9,10 @@ const GTMService = {
   updateConsent(prefs, gtmCallback, suppressLog = false) {
     // Initialize dataLayer if not already available
     window.dataLayer = window.dataLayer || [];
-
     // Push consent update event to GTM
     window.dataLayer.push({
       event: "consentUpdate",
     });
-
     // Handle consent updates via callback or directly with gtag
     if (gtmCallback) {
       gtmCallback(prefs);
@@ -41,7 +39,6 @@ const GTMService = {
       }
     }
   },
-
   /**
    * If Google Consent Mode is enabled, we need to unblock GTM and retain whatever consent the user has already given
    */
@@ -49,5 +46,4 @@ const GTMService = {
     //If Google Consent Mode is enabled, we need to unblock GTM and retain whatever consent the user has already given
   },
 };
-
 export default GTMService;

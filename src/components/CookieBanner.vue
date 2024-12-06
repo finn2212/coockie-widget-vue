@@ -24,7 +24,7 @@
         @click="openPreferences"
         aria-label="Open Cookie Preferences"
       >
-        <SettingsSvg />
+        <SettingsIcon />
       </button>
       <!-- Preferences or Reject All Button -->
       <button
@@ -41,13 +41,12 @@
     </div>
   </div>
 </template>
-
 <script>
-import CoockieIcon from "@/components/CoockieIcon.vue";
-import SettingsSvg from "@/components/SettingsSvg.vue";
+import CoockieIcon from "@/components/svgs/CoockieIcon.vue";
+import SettingsIcon from "@/components/svgs/SettingsIcon.vue";
 
 export default {
-  components: { CoockieIcon, SettingsSvg },
+  components: { CoockieIcon, SettingsIcon },
   props: {
     content: {
       type: Object,
@@ -64,7 +63,6 @@ export default {
       if (this.layout.appearance === "pill") {
         return this.content.widgetPillMessage;
       }
-
       let message = this.content.widgetBannerMessage || "";
 
       // Replace [cookiepolicy] with a link
@@ -72,7 +70,6 @@ export default {
         const policyLink = `<a href="${this.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
         message = message.replace("[cookiepolicy]", policyLink);
       }
-
       return message;
     },
     buttonText() {
@@ -107,7 +104,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* Optional: Scoped styles specific to this component */
-</style>

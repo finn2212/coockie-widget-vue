@@ -1,7 +1,6 @@
 const ThemeService = {
   correctFontFamily(wrapperElement) {
     if (!wrapperElement) return;
-
     const originalFontFamily =
       window.getComputedStyle(wrapperElement).fontFamily;
     wrapperElement.style.setProperty("font-family", "initial");
@@ -14,7 +13,6 @@ const ThemeService = {
       wrapperElement.style.removeProperty("font-family");
     }
   },
-
   setThemeVariables(theme) {
     const root = document.documentElement.style;
     root.setProperty("--gt-cookie-bg", theme.background);
@@ -25,5 +23,4 @@ const ThemeService = {
     root.setProperty("--gt-cookie-font-size", theme.fontSize);
   },
 };
-
 export default ThemeService;

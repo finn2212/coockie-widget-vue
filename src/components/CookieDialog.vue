@@ -7,7 +7,6 @@
     :aria-hidden="!isDialogOpen"
   >
     <span tabindex="0" data-gt-cookie-tab-trap-top="dialog"></span>
-
     <div class="gt-cookie-dialog__modal">
       <!-- Close Button -->
       <button
@@ -15,36 +14,14 @@
         aria-label="Close Cookie Preferences Dialog"
         @click="closeDialog"
       >
-        <svg
-          width="11"
-          height="11"
-          viewBox="0 0 11 11"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.24265 0.778076L9.72793 9.26336"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-          <path
-            d="M1.24265 9.26343L9.72793 0.778146"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
+        <CloseIcon />
       </button>
-
       <!-- Dialog Heading -->
       <h2 class="gt-cookie-dialog__heading" id="gt-cookie-dialog-heading">
         {{ content.dialogTitle }}
       </h2>
-
       <!-- Dialog Content -->
       <p class="gt-cookie-dialog__content" v-html="processedDialogMessage"></p>
-
       <!-- Cookie Form -->
       <form class="gt-cookie-dialog__form">
         <div
@@ -73,7 +50,7 @@
               :aria-checked="category.accepted"
               :aria-describedby="'description-' + category.name"
             >
-              <CheckBox />
+              <CheckBoxIcon />
             </div>
             <span class="gt-cookie-dialog__checkbox-label">
               {{ getCategoryTitle(category.slug) }}
@@ -93,7 +70,6 @@
             }}</span>
             <span v-else>{{ content.widgetHideCookiesButton }}</span>
           </button>
-
           <!-- Description -->
           <span
             class="gt-cookie-dialog__checkbox-description"
@@ -101,7 +77,6 @@
           >
             {{ getCategoryDescription(category.slug) }}
           </span>
-
           <!-- Cookie Table -->
           <cookie-table
             :tableId="'table-' + category.key"
@@ -111,7 +86,6 @@
           ></cookie-table>
         </div>
       </form>
-
       <!-- Footer -->
       <div class="gt-cookie-dialog__footer">
         <button
@@ -138,15 +112,15 @@
         </button>
       </div>
     </div>
-
     <span tabindex="0" data-gt-cookie-tab-trap-bottom="dialog"></span>
   </div>
 </template>
 <script>
 import CookieTable from "./CookieTable.vue";
-import CheckBox from "@/components/svgs/CheckBox.vue";
+import CheckBoxIcon from "@/components/svgs/CheckBoxIcon.vue";
+import CloseIcon from "@/components/svgs/CloseIcon.vue";
 export default {
-  components: { CookieTable, CheckBox },
+  components: { CookieTable, CheckBoxIcon, CloseIcon },
   props: {
     isDialogOpen: {
       type: Boolean,
@@ -176,7 +150,6 @@ export default {
         const policyLink = `<a href="${this.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
         message = message.replace("[cookiepolicy]", policyLink);
       }
-
       return message;
     },
   },
@@ -190,7 +163,6 @@ export default {
     acceptAll() {
       this.$emit("accept-all");
     },
-
     rejectAll() {
       this.$emit("reject-all");
     },
@@ -205,7 +177,6 @@ export default {
         analytics: this.content.cookieAnalyticsTitle,
         unclassified: this.content.cookieUnclassifiedTitle,
       };
-
       return titleMapping[slug] || slug;
     },
     getCategoryDescription(slug) {
@@ -216,11 +187,8 @@ export default {
         analytics: this.content.cookieAnalyticsDescription,
         unclassified: this.content.cookieUnclassifiedDescription,
       };
-
       return descriptionMapping[slug] || slug;
     },
   },
 };
 </script>
-
-<style scoped lang="scss"></style>

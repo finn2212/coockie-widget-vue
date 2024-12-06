@@ -10,7 +10,7 @@ export const mockConfig = {
     buttonText: "#ffffff",
   },
   layout: {
-    appearance: "pill", // Can be 'pill', 'banner', 'popup', or 'card'
+    appearance: "banner", // Can be 'pill', 'banner', 'popup', or 'card'
     position: "center", // Can be 'left', 'center', or 'right'
   },
   content: {
@@ -51,9 +51,9 @@ export const mockConfig = {
   },
   functionality: {
     allowPreferences: true, // Allows users to manage preferences
-    blockInteraction: true, // Prevents interaction until consent is given
+    blockInteraction: false, // Prevents interaction until consent is given
     blockScripts: true, // Blocks third-party scripts before consent
-    hasRejectAll: true, // Adds a 'Reject All' button
+    hasRejectAll: false, // Adds a 'Reject All' button
     googleConsentMode: true, // Integrates with Google Consent Mode
   },
   cookies: {

@@ -1,24 +1,25 @@
 const STORAGE_KEY = "getterms_cookie_consent";
+
 import GTMService from "@/services/GTMService";
 import LogService from "./LogService";
 
 export default {
   getItem(key) {
     const cache = localStorage.getItem(STORAGE_KEY);
+
     if (!cache) return null;
     const parsedCache = JSON.parse(cache);
     return parsedCache[key] || null;
   },
-
   setItem(key, value) {
     const cache = localStorage.getItem(STORAGE_KEY);
     const parsedCache = cache ? JSON.parse(cache) : {};
+
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ ...parsedCache, [key]: value })
     );
   },
-
   initializeCookies(defaultCookies, config) {
     // Load saved preferences from localStorage
     const savedPreferences = this.getItem("cookie_preferences");
@@ -27,6 +28,7 @@ export default {
     // return coockies with accpted property added
     return Object.keys(defaultCookies).reduce((result, key, index) => {
       const category = defaultCookies[key];
+
       result[key] = {
         ...category,
         accepted:
@@ -41,12 +43,10 @@ export default {
       return result;
     }, {});
   },
-
   blockCookies(preferences, config) {
     const blockList = this.getBlockedCategories(preferences, config);
     const cookieString = document.cookie || ""; // Default to an empty string if undefined
     const existingCookies = cookieString.split("; "); // Safely split the string
-
     const blockCookie = (name) => {
       const domain = window.location.hostname;
       const path = "/";
@@ -56,11 +56,9 @@ export default {
       document.cookie = `${name}=; expires=${expires}; path=${path}; domain=${domain};`;
       document.cookie = `${name}=; expires=${expires}; path=${path}; domain=.${domain};`;
     };
-
     const matchesBlockList = (name) => {
       return blockList.some((prefix) => name.startsWith(prefix));
     };
-
     // Process existing cookies
     existingCookies.forEach((cookie) => {
       const [name] = cookie.split("=");
@@ -68,7 +66,6 @@ export default {
         blockCookie(name);
       }
     });
-
     // Override document.cookie to prevent setting blocked cookies
     const originalCookieSetter = Object.getOwnPropertyDescriptor(
       Document.prototype,
@@ -86,7 +83,6 @@ export default {
       },
     });
   },
-
   resetCookieOverride() {
     // Restore the original document.cookie setter
     const originalCookieDescriptor = Object.getOwnPropertyDescriptor(
@@ -96,7 +92,6 @@ export default {
 
     Object.defineProperty(document, "cookie", originalCookieDescriptor);
   },
-
   updateAllCookiesStatus(cookies, accepted, config) {
     const newCoockies = Object.keys(cookies).reduce((result, key, index) => {
       result[key] = {
@@ -109,7 +104,6 @@ export default {
     this.savePreferences(newCoockies, config);
     return newCoockies;
   },
-
   async savePreferences(cookies, config) {
     const preferences = Object.keys(cookies).reduce((prefs, key) => {
       prefs[key] = {
@@ -131,7 +125,6 @@ export default {
     if (config.functionality) {
       GTMService.updateConsent(preferences);
     }
-
     const user_id = await LogService.logPreferences(
       preferences,
       config,

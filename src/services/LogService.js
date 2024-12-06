@@ -1,7 +1,6 @@
 // src/services/LogService.js
 import Client from "./Client";
 import CookieService from "./CookieService"; // Assuming this is where `localStorageGetItem` and `localStorageSetItem` are defined.
-
 const LogService = {
   /**
    * Logs updated preferences to the server using the Client class.
@@ -46,5 +45,4 @@ const LogService = {
     }
   },
 };
-
 export default LogService;
