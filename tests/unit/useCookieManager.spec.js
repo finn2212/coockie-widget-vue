@@ -57,3 +57,21 @@ describe("useCookieManager", () => {
     expect(cookieManager.isCookieBannerOpen.value).toBe(true);
   });
 });
+
+describe("useCookieManager", () => {
+  it("opens and closes the dialog", () => {
+    // Initialize the composable
+    const cookieManager = useCookieManager();
+
+    // Initially, the dialog should be closed
+    expect(cookieManager.isDialogOpen.value).toBe(false);
+
+    // Open the dialog
+    cookieManager.openDialog();
+    expect(cookieManager.isDialogOpen.value).toBe(true);
+
+    // Close the dialog
+    cookieManager.closeDialog();
+    expect(cookieManager.isDialogOpen.value).toBe(false);
+  });
+});
