@@ -5,6 +5,7 @@
     role="dialog"
     aria-labelledby="gt-cookie-dialog-heading"
     :aria-hidden="!isDialogOpen"
+    v-if="config && config.content"
   >
     <span tabindex="0" data-gt-cookie-tab-trap-top="dialog"></span>
     <div class="gt-cookie-dialog__modal">
@@ -18,7 +19,7 @@
       </button>
       <!-- Dialog Heading -->
       <h2 class="gt-cookie-dialog__heading" id="gt-cookie-dialog-heading">
-        {{ content.dialogTitle }}
+        {{ config.content.dialogTitle }}
       </h2>
       <!-- Dialog Content -->
       <p class="gt-cookie-dialog__content" v-html="processedDialogMessage"></p>
@@ -66,9 +67,9 @@
             @click="toggleTable(key)"
           >
             <span v-if="!expandedTables[key]">{{
-              content.widgetShowCookiesButton
+              config.content.widgetShowCookiesButton
             }}</span>
-            <span v-else>{{ content.widgetHideCookiesButton }}</span>
+            <span v-else>{{ config.content.widgetHideCookiesButton }}</span>
           </button>
           <!-- Description -->
           <span
@@ -82,7 +83,7 @@
             :tableId="'table-' + category.key"
             :cookies="category.cookies"
             :isExpanded="expandedTables[key] || false"
-            :content="content"
+            :content="config.content"
           ></cookie-table>
         </div>
       </form>
@@ -91,50 +92,57 @@
         <button
           type="button"
           class="gt-cookie-dialog__button gt-cookie-dialog__button--stroke"
-          @click="savePreferences"
+          @click="savePreferences(cookies)"
         >
-          {{ content.dialogSavePreferencesButton }}
+          {{ config.content.dialogSavePreferencesButton }}
         </button>
         <button
-          v-if="functionality.hasRejectAll"
+          v-if="config.functionality.hasRejectAll"
           type="button"
           class="gt-cookie-dialog__button gt-cookie-dialog__button--stroke"
-          @click="rejectAll"
+          @click="rejectAllCookies"
         >
-          {{ content.dialogRejectAllButton }}
+          {{ config.content.dialogRejectAllButton }}
         </button>
         <button
           type="button"
           class="gt-cookie-dialog__button"
-          @click="acceptAll"
+          @click="acceptAllCookies"
         >
-          {{ content.dialogAcceptAllButton }}
+          {{ config.content.dialogAcceptAllButton }}
         </button>
       </div>
     </div>
     <span tabindex="0" data-gt-cookie-tab-trap-bottom="dialog"></span>
   </div>
 </template>
+
 <script>
 import CookieTable from "./CookieTable.vue";
+import { useCookieManager } from "@/composables/useCookieManager";
 import CheckBoxIcon from "@/components/svgs/CheckBoxIcon.vue";
 import CloseIcon from "@/components/svgs/CloseIcon.vue";
+
 export default {
   components: { CookieTable, CheckBoxIcon, CloseIcon },
-  props: {
-    isDialogOpen: {
-      type: Boolean,
-      default: false,
-    },
-    content: {
-      type: Object,
-    },
-    functionality: {
-      type: Object,
-    },
-    cookies: {
-      type: Object,
-    },
+  setup() {
+    const {
+      config,
+      cookies,
+      closeDialog,
+      savePreferences,
+      acceptAllCookies,
+      rejectAllCookies,
+    } = useCookieManager();
+
+    return {
+      config,
+      cookies,
+      closeDialog,
+      savePreferences,
+      acceptAllCookies,
+      rejectAllCookies,
+    };
   },
   data() {
     return {
@@ -143,11 +151,12 @@ export default {
   },
   computed: {
     processedDialogMessage() {
-      let message = this.content.dialog_message || "";
+      if (!this.config || !this.config.content) return "";
+      let message = this.config.content.dialog_message || "";
 
       // Replace [cookiepolicy] with a link
       if (message.includes("[cookiepolicy]")) {
-        const policyLink = `<a href="${this.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
+        const policyLink = `<a href="${this.config.content.cookiePolicyUrl}" target="_blank" rel="noopener noreferrer">Cookie Policy</a>`;
         message = message.replace("[cookiepolicy]", policyLink);
       }
       return message;
@@ -157,35 +166,25 @@ export default {
     toggleTable(key) {
       this.expandedTables[key] = !this.expandedTables[key];
     },
-    savePreferences() {
-      this.$emit("save-preferences", this.cookies);
-    },
-    acceptAll() {
-      this.$emit("accept-all");
-    },
-    rejectAll() {
-      this.$emit("reject-all");
-    },
-    closeDialog() {
-      this.$emit("close-dialog");
-    },
     getCategoryTitle(slug) {
+      if (!this.config || !this.config.content) return slug;
       const titleMapping = {
-        "essential-cookies": this.content.cookieEssentialTitle,
-        functional: this.content.cookieFunctionalTitle,
-        marketing: this.content.cookieMarketingTitle,
-        analytics: this.content.cookieAnalyticsTitle,
-        unclassified: this.content.cookieUnclassifiedTitle,
+        "essential-cookies": this.config.content.cookieEssentialTitle,
+        functional: this.config.content.cookieFunctionalTitle,
+        marketing: this.config.content.cookieMarketingTitle,
+        analytics: this.config.content.cookieAnalyticsTitle,
+        unclassified: this.config.content.cookieUnclassifiedTitle,
       };
       return titleMapping[slug] || slug;
     },
     getCategoryDescription(slug) {
+      if (!this.config || !this.config.content) return slug;
       const descriptionMapping = {
-        "essential-cookies": this.content.cookieEssentialDescription,
-        functional: this.content.cookieFunctionalDescription,
-        marketing: this.content.cookieMarketingDescription,
-        analytics: this.content.cookieAnalyticsDescription,
-        unclassified: this.content.cookieUnclassifiedDescription,
+        "essential-cookies": this.config.content.cookieEssentialDescription,
+        functional: this.config.content.cookieFunctionalDescription,
+        marketing: this.config.content.cookieMarketingDescription,
+        analytics: this.config.content.cookieAnalyticsDescription,
+        unclassified: this.config.content.cookieUnclassifiedDescription,
       };
       return descriptionMapping[slug] || slug;
     },
